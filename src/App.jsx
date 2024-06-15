@@ -1,28 +1,41 @@
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
+
+// css
+import "./index.css";
+
+// Layout
 import MainLayout from "./layout/MainLayout";
 
-  //Pages
+// components
+import ProtectedRoutes from "./components/ProtectedRoutes";
+
+// Pages
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Product from "./pages/Product";
-// import Login from "./pages/Login";
-import ProtectedRoutes from "./components/ProtectedRoutes";
-// import Register from "./pages/Register";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
-// context
-import { useContext } from "react";
+// Global Context
+import { useContext, useEffect } from "react";
 import { GlobalContext } from "./context/GlobalContext";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase/firebaseConfig";
 
 function App() {
-  const { user } = useContext(GlobalContext);
-  console.log(user);
-  const routes = createBrowserRouter([
+  let { user, dispatch, isAuthChange } = useContext(GlobalContext);
+
+  let routes = createBrowserRouter([
     {
       path: "/",
-      element:(
-        <ProtectedRoutes user={true}> 
-         <MainLayout />,
+      element: (
+        <ProtectedRoutes user={user}>
+          <MainLayout />
         </ProtectedRoutes>
       ),
       children: [
@@ -38,25 +51,30 @@ function App() {
           path: "/contact",
           element: <Contact />,
         },
-
         {
           path: "/product/:id",
           element: <Product />,
         },
       ],
     },
-  
     {
-      path: "/login",
-      element:true ? <Navigate to="/" /> : <Login/>,
+      path: `/login`,
+      element: user ? <Navigate to="/" /> : <Login />,
     },
     {
-      path: "/register",
-      element:true? <Navigate to="/" /> :<Register/>,
-    }
+      path: `/register`,
+      element: user ? <Navigate to="/" /> : <Register />,
+    },
   ]);
 
-  return <RouterProvider router={routes} />;
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      dispatch({ type: `LOG_IN`, payload: user });
+      dispatch({ type: `AUTH_CHANGE` });
+    });
+  }, []);
+
+  return <>{isAuthChange && <RouterProvider router={routes} />} </>;
 }
 
 export default App;

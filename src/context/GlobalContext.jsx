@@ -1,28 +1,39 @@
-import { createContext, useReducer} from "react";
+import { createContext, useReducer, useState } from "react";
 
-export const  GlobalContext = createContext()
+export let GlobalContext = createContext();
 
-    const changeState = (state,action) => {
-        const {type , payload} = action
-        switch (type) {
-            case "LOG_IN":
-                return {...state, user:payload}
-            case "LOG_OUT":
-                return {...state,user:null}
-            default:
-                return state
-        }
+function GlobalContextProvider({ children }) {
+  let changeState = (state, action) => {
+    let { type, payload } = action;
+
+    switch (type) {
+      case `LOG_IN`:
+        return { ...state, user: payload };
+      case `LOG_OUT`:
+        return { ...state, user: null };
+      case `AUTH_CHANGE`:
+        return { ...state, isAuthChange: true };
+      default:
+        return state;
     }
+  };
 
-function GlobalContextProvider({children}) {
-    const[state,dispatch] = useReducer(changeState, {
-        user:null,
-        product:[]
-    })
-    return (
-        <GlobalContext.Provider value={{...state}}>
-            {children}
-        </GlobalContext.Provider>
-    )
+  let [state, dispatch] = useReducer(changeState, {
+    user: null,
+    products: [],
+    total: 0,
+    isAuthChange: false,
+  });
+
+  let [changeTotal, setChangeTotal] = useState(state.total);
+
+  return (
+    <GlobalContext.Provider
+      value={{ ...state, changeTotal, setChangeTotal, dispatch }}
+    >
+      {children}
+    </GlobalContext.Provider>
+  );
 }
-export default GlobalContextProvider
+
+export default GlobalContextProvider;
