@@ -49,9 +49,8 @@ function Register() {
           </button>
 
           <div className="p-5">
-            <h3 className="text-2xl mb-0.5 font-medium">Register</h3>
-            <p className="mb-4 text-sm font-normal text-gray-800">
-              Create your account
+            <p className="mb-4 text-2xl text-center  font-bold  text-green-600">
+              Login
             </p>
 
             <div className="mt-7 flex flex-col gap-2">
@@ -86,66 +85,6 @@ function Register() {
               </button>
             </div>
 
-            <div className="flex w-full items-center gap-2 py-6 text-sm text-slate-600">
-              <div className="h-px w-full bg-slate-200"></div>
-              OR
-              <div className="h-px w-full bg-slate-200"></div>
-            </div>
-
-            <form onSubmit={handleRegister} className="w-full">
-              <label htmlFor="email" className="sr-only">
-                Email address
-              </label>
-              <input
-                type="email"
-                name="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
-                placeholder="Email Address"
-              />
-
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                autoComplete="new-password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-2 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
-                placeholder="Password"
-              />
-
-              <p className="mb-3 mt-2 text-sm text-gray-500">
-                <a
-                  href="/forgot-password"
-                  className="text-blue-800 hover:text-blue-600"
-                >
-                  Reset your password?
-                </a>
-              </p>
-
-              {error && <p className="text-red-500">{error}</p>}
-
-              <button
-                type="submit"
-                className="inline-flex w-full items-center justify-center rounded-lg bg-black p-2 py-3 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 disabled:bg-gray-400"
-              >
-                Continue
-              </button>
-            </form>
-
-            <div className="mt-6 text-center text-sm text-slate-600">
-              Already have an account?{" "}
-              <a href="/login" className="font-medium text-[#4285f4]">
-                Log in
-              </a>
-            </div>
           </div>
         </div>
       </div>
